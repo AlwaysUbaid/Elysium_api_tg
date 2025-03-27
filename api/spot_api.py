@@ -68,13 +68,13 @@ def check_connection():
 class MarketOrderRequest(BaseModel):
     symbol: str = Field(
         ..., 
-        description="Trading pair symbol (e.g., 'BTC/USDT')",
-        example="BTC/USDT"
+        description="Trading pair symbol (e.g., 'BTC/USDC')",
+        example="BTC/USDC"
     )
     size: confloat(gt=MIN_ORDER_SIZE, le=MAX_ORDER_SIZE) = Field(
         ..., 
         description=f"Order size (between {MIN_ORDER_SIZE} and {MAX_ORDER_SIZE})",
-        example=0.1
+        example=1
     )
     slippage: confloat(ge=MIN_SLIPPAGE, le=MAX_SLIPPAGE) = Field(
         default=0.05, 
@@ -85,18 +85,18 @@ class MarketOrderRequest(BaseModel):
     @validator('symbol')
     def validate_symbol(cls, v):
         # Additional validation for common trading pairs
-        common_pairs = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'XRP/USDT']
+        common_pairs = ['BTC/USDC', 'ETH/USDC', 'BNB/USDC', 'XRP/USDC']
         if v not in common_pairs:
             # If not a common pair, validate the format
             if not re.match(r'^[A-Z0-9]+/[A-Z0-9]+$', v):
-                raise ValueError('Invalid trading pair format. Use format like "BTC/USDT"')
+                raise ValueError('Invalid trading pair format. Use format like "BTC/USDC"')
         return v
 
 class LimitOrderRequest(BaseModel):
     symbol: str = Field(
         ..., 
-        description="Trading pair symbol (e.g., 'BTC/USDT')",
-        example="BTC/USDT"
+        description="Trading pair symbol (e.g., 'BTC/USDC')",
+        example="BTC/USDC"
     )
     size: confloat(gt=MIN_ORDER_SIZE, le=MAX_ORDER_SIZE) = Field(
         ..., 
@@ -112,18 +112,18 @@ class LimitOrderRequest(BaseModel):
     @validator('symbol')
     def validate_symbol(cls, v):
         # Additional validation for common trading pairs
-        common_pairs = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'XRP/USDT']
+        common_pairs = ['BTC/USDC', 'ETH/USDC', 'BNB/USDC', 'XRP/USDC']
         if v not in common_pairs:
             # If not a common pair, validate the format
             if not re.match(r'^[A-Z0-9]+/[A-Z0-9]+$', v):
-                raise ValueError('Invalid trading pair format. Use format like "BTC/USDT"')
+                raise ValueError('Invalid trading pair format. Use format like "BTC/USDC"')
         return v
 
 class CancelOrderRequest(BaseModel):
     symbol: str = Field(
         ..., 
-        description="Trading pair symbol (e.g., 'BTC/USDT')",
-        example="BTC/USDT"
+        description="Trading pair symbol (e.g., 'BTC/USDC')",
+        example="BTC/USDC"
     )
     order_id: int = Field(
         ..., 
@@ -135,29 +135,29 @@ class CancelOrderRequest(BaseModel):
     @validator('symbol')
     def validate_symbol(cls, v):
         # Additional validation for common trading pairs
-        common_pairs = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'XRP/USDT']
+        common_pairs = ['BTC/USDC', 'ETH/USDC', 'BNB/USDC', 'XRP/USDC']
         if v not in common_pairs:
             # If not a common pair, validate the format
             if not re.match(r'^[A-Z0-9]+/[A-Z0-9]+$', v):
-                raise ValueError('Invalid trading pair format. Use format like "BTC/USDT"')
+                raise ValueError('Invalid trading pair format. Use format like "BTC/USDC"')
         return v
 
 class CancelAllOrdersRequest(BaseModel):
     symbol: Optional[str] = Field(
         None, 
         description="Optional trading pair symbol to cancel orders for",
-        example="BTC/USDT"
+        example="BTC/USDC"
     )
 
     @validator('symbol')
     def validate_symbol(cls, v):
         if v is not None:
             # Additional validation for common trading pairs
-            common_pairs = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'XRP/USDT']
+            common_pairs = ['BTC/USDC', 'ETH/USDC', 'BNB/USDC', 'XRP/USDC']
             if v not in common_pairs:
                 # If not a common pair, validate the format
                 if not re.match(r'^[A-Z0-9]+/[A-Z0-9]+$', v):
-                    raise ValueError('Invalid trading pair format. Use format like "BTC/USDT"')
+                    raise ValueError('Invalid trading pair format. Use format like "BTC/USDC"')
         return v
 
 # Response Models
@@ -178,7 +178,7 @@ async def market_buy(request: MarketOrderRequest):
     Execute a market buy order
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - size: Order size (0.0001-1000)
     - slippage: Maximum allowed slippage (0-1)
     """
@@ -209,7 +209,7 @@ async def market_sell(request: MarketOrderRequest):
     Execute a market sell order
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - size: Order size (0.0001-1000)
     - slippage: Maximum allowed slippage (0-1)
     """
@@ -240,7 +240,7 @@ async def limit_buy(request: LimitOrderRequest):
     Place a limit buy order
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - size: Order size (0.0001-1000)
     - price: Order price (0.0001-1000000)
     """
@@ -271,7 +271,7 @@ async def limit_sell(request: LimitOrderRequest):
     Place a limit sell order
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - size: Order size (0.0001-1000)
     - price: Order price (0.0001-1000000)
     """
@@ -302,7 +302,7 @@ async def cancel_order(request: CancelOrderRequest):
     Cancel a specific order
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - order_id: Order ID to cancel (must be positive)
     """
     try:
@@ -331,7 +331,7 @@ async def cancel_all_orders(request: CancelAllOrdersRequest):
     Cancel all open orders, optionally filtered by symbol
     
     Parameters:
-    - symbol: Optional trading pair to cancel orders for (e.g., 'BTC/USDT')
+    - symbol: Optional trading pair to cancel orders for (e.g., 'BTC/USDC')
     """
     try:
         check_connection()
