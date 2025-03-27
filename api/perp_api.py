@@ -82,7 +82,7 @@ class BaseRequest(BaseModel):
     symbol: str = Field(
         ..., 
         description="Trading pair symbol (can be any arbitrary value)",
-        example="BTC-PERP"
+        example="BTC"
     )
 
     @validator('symbol')
