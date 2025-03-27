@@ -72,8 +72,8 @@ def check_connection():
 class ScaledOrdersRequest(BaseModel):
     symbol: str = Field(
         ..., 
-        description="Trading pair symbol (e.g., 'BTC/USDT', 'ETH/USDC', 'SOL/BTC', etc.)",
-        example="BTC/USDT"
+        description="Trading pair symbol (e.g., 'BTC/USDC', 'ETH/USDC', 'SOL/BTC', etc.)",
+        example="BTC/USDC"
     )
     is_buy: bool = Field(
         ...,
@@ -120,7 +120,7 @@ class ScaledOrdersRequest(BaseModel):
     def validate_symbol(cls, v):
         # Accept any valid trading pair format
         if not re.match(r'^[A-Z0-9]+/[A-Z0-9]+$', v):
-            raise ValueError('Invalid trading pair format. Use format like "BTC/USDT" or "ETH/USDC"')
+            raise ValueError('Invalid trading pair format. Use format like "BTC/USDC" or "ETH/USDC"')
         return v
 
 class PerpScaledOrdersRequest(ScaledOrdersRequest):
@@ -138,8 +138,8 @@ class PerpScaledOrdersRequest(ScaledOrdersRequest):
 class MarketAwareScaledRequest(BaseModel):
     symbol: str = Field(
         ..., 
-        description="Trading pair symbol (e.g., 'BTC/USDT', 'ETH/USDC', 'SOL/BTC', etc.)",
-        example="BTC/USDT"
+        description="Trading pair symbol (e.g., 'BTC/USDC', 'ETH/USDC', 'SOL/BTC', etc.)",
+        example="BTC/USDC"
     )
     total_size: confloat(gt=MIN_ORDER_SIZE, le=MAX_ORDER_SIZE) = Field(
         ...,
@@ -179,7 +179,7 @@ async def scaled_orders(request: ScaledOrdersRequest):
     Place multiple orders across a price range with an optional skew
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - is_buy: True for buy orders, False for sell orders
     - total_size: Total order size (0.0001-1000)
     - num_orders: Number of orders to place (1-100)
@@ -222,7 +222,7 @@ async def perp_scaled_orders(request: PerpScaledOrdersRequest):
     Place multiple perpetual orders across a price range with an optional skew
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - is_buy: True for buy orders, False for sell orders
     - total_size: Total order size (0.0001-1000)
     - num_orders: Number of orders to place (1-100)
@@ -265,7 +265,7 @@ async def market_aware_scaled_buy(request: MarketAwareScaledRequest):
     Place multiple buy orders across a price range with market awareness
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - total_size: Total order size (0.0001-1000)
     - num_orders: Number of orders to place (1-100)
     - price_percent: Price range as percentage of current market price
@@ -300,7 +300,7 @@ async def market_aware_scaled_sell(request: MarketAwareScaledRequest):
     Place multiple sell orders across a price range with market awareness
     
     Parameters:
-    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - symbol: Trading pair (e.g., 'BTC/USDC')
     - total_size: Total order size (0.0001-1000)
     - num_orders: Number of orders to place (1-100)
     - price_percent: Price range as percentage of current market price
